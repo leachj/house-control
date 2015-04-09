@@ -1,12 +1,8 @@
 
-class Room
-
-        def initialize(contents)
-                @contents = contents
-        end
+class Room < Hash
 
 	def [](key)
-		@contents[key]
+		fetch(key)
 	end
 
 	def method_missing(method_sym, *arguments, &block)
