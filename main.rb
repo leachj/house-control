@@ -12,6 +12,9 @@ scheduler = Rufus::Scheduler.new
 _ = Wildcard.new
 rules = Rules.new
 state = State.new(rules)
+rules.state = state
+
+state[:home] = false
 
 #rfxcom = Rfxcom.new(rules)
 #rooms = { :lounge => Room.new({ :floorLamp => Lightwave.new("0xF122AA",1), :wallLights => Milight.new(3), :fireLights => Milight.new(1), :cabinetLights => Milight.new(4), :tableLights => Milight.new(2) })}
@@ -56,9 +59,7 @@ end
 
 
 rules.on [:ping, _, true] do |n|
-	if(!state[:home])
-		state[:home] = true;
-	end
+	state[:home] = true;
 end
 
 rules.on [:ping, _, false] do |n|
@@ -67,7 +68,7 @@ rules.on [:ping, _, false] do |n|
 	end
 end
 
-rules.on [:state, :home, true] do
+rules.on [:state, :home, true], :given=>[:home, false] do
 	puts "now home!"
 end
 

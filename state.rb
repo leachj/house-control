@@ -6,8 +6,8 @@ class State < Hash
 
 
 	def []=(key, value)
-		store(key,value)
 		@rules.process([:state, key, value])
+		store(key,value)
   	end
 
 end
