@@ -1,4 +1,4 @@
-class Underscore
+class Wildcard
 
   def ==(anything)
     true
@@ -21,7 +21,9 @@ class Rules
                         condition = rule[0]
                         code = rule[1]
 
-                        if(condition == events)
+			minLength = ([condition.length,events.length].min)
+			
+                        if(condition[0,minLength] == events[0,minLength])
 
                                 code.call events
                         end
