@@ -3,22 +3,21 @@ require_relative 'rfxcom'
 require_relative 'lightwave'
 require_relative 'timer'
 require_relative 'rules'
+require_relative 'state'
 require_relative 'room'
 require_relative 'pinger'
+require 'rufus-scheduler'
+
+scheduler = Rufus::Scheduler.new
 
 _ = Wildcard.new
 rules = Rules.new
-state = {}
+state = State.new(rules)
 
-def given(foo, &bar)
-	[]
-end
-
-rfxcom = Rfxcom.new(rules)
-timer = Timer.new(rules)
-rooms = { :lounge => Room.new({ :floorLamp => Lightwave.new("0xF122AA",1), :wallLights => Milight.new(3), :fireLights => Milight.new(1), :cabinetLights => Milight.new(4), :tableLights => Milight.new(2) })}
-
-ping = Pinger.new(rules, "192.168.1.111")
+#rfxcom = Rfxcom.new(rules)
+#rooms = { :lounge => Room.new({ :floorLamp => Lightwave.new("0xF122AA",1), :wallLights => Milight.new(3), :fireLights => Milight.new(1), :cabinetLights => Milight.new(4), :tableLights => Milight.new(2) })}
+rooms = {}
+ping = Pinger.new(rules, { :jonsPhone => "192.168.1.111", :natashasPhone => "192.168.1.1"})
 
 rules.on [:rfxcom, "0xF40C9E", _, "On"] do |n|
         rooms[:lounge][:wallLights].on
@@ -46,27 +45,45 @@ end
 
 rules.on [:rfxcom, "0xF422A3", _, "On"] do |n|
 	rooms[:lounge][:tableLights].on
-#	timer.in(:test,5) do 
-#		rooms[:lounge][:tableLights].off
-#	end
 end
-
-#rules.on [:time, 21, 38, _] do |n|
-#	rooms[:lounge][:tableLights].on
-#end
 
 rules.on [:rfxcom, "0xF422A3", _, "Off"] do |n|
 	rooms[:lounge][:tableLights].off
 end
 
-rules.on [_, _, _, _] do |n|
+rules.on [:ping] do |n|
+	state[n[1]] = n[2]
+end
+
+
+rules.on [:ping, _, true] do |n|
+	if(!state[:home])
+		state[:home] = true;
+	end
+end
+
+rules.on [:ping, _, false] do |n|
+	if(!state[:jonsPhone] && !state[:natashasPhone])
+		state[:home] = false;
+	end
+end
+
+rules.on [:state, :home, true] do
+	puts "now home!"
+end
+
+rules.on [:state, :home, false] do
+	puts "gone away"
+end
+
+rules.on [_] do |n|
 	puts "fired event: #{n}"
 end
 
-rules.on [_, _, _, _] do |n|
-	if(state[:test]) then puts "test state true" end
+scheduler.every '5s' do
+	puts "Heartbeat - state is: #{state}"
 end
 
 
 ping.start
-timer.run
+scheduler.join

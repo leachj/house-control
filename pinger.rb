@@ -2,28 +2,29 @@ require 'net/ping'
 
 class Pinger
 
-        def initialize(rules, host)
-                @pinger = Net::Ping::ICMP.new(host)
+        def initialize(rules, hosts)
+                @pingers = {}
                 @rules = rules
-		@state = false
-		@host = host
+		@states = {}
+		hosts.each do |key,val|
+			@states[key] = false
+			@pingers[key] = Net::Ping::ICMP.new(val)
+		end
         end
 
         def start
 		Thread.new{
 			while true do
 				sleep(5)
-				newState = ping()
-				if(newState!=@state)
-					@state = newState
-					@rules.process([:ping, @host, @state])
+				@states.each do |key, val|
+					newState = @pingers[key].ping
+					if(newState!=@states[key])
+						@states[key] = newState
+						@rules.process([:ping, key, newState])
+					end
 				end
 			end
 		}
-	end
-
-	def ping
-		@pinger.ping 
 	end
 
 end
