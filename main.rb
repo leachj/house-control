@@ -16,10 +16,13 @@ rules.state = state
 
 state[:home] = false
 
-#rfxcom = Rfxcom.new(rules)
-#rooms = { :lounge => Room.new({ :floorLamp => Lightwave.new("0xF122AA",1), :wallLights => Milight.new(3), :fireLights => Milight.new(1), :cabinetLights => Milight.new(4), :tableLights => Milight.new(2) })}
-rooms = { :lounge => Room.new({})}
-ping = Pinger.new(rules, { :jonsPhone => "192.168.1.111", :natashasPhone => "192.168.1.1"})
+rfxcom = Rfxcom.new(rules)
+rooms = { :lounge => Room.new({ :floorLamp => Lightwave.new("0xF122AA",1), :wallLights => Milight.new("192.168.1.107",3), :fireLights => Milight.new("192.168.1.107",1), :cabinetLights => Milight.new("192.168.1.107",4), :tableLights => Milight.new("192.168.1.107",2) })}
+ping = Pinger.new(rules, { :jonsPhone => "192.168.1.111", :natashasPhone => "192.168.1.132"})
+
+rules.on [_] do |n|
+	puts "fired event: #{n}"
+end
 
 rules.on [:rfxcom, "0xF40C9E", _, "On"] do |n|
         rooms[:lounge][:wallLights].on
@@ -76,9 +79,6 @@ rules.on [:state, :home, false] do
 	puts "gone away"
 end
 
-rules.on [_] do |n|
-	puts "fired event: #{n}"
-end
 
 scheduler.every '5s' do
 	puts "Heartbeat - state is: #{state}"

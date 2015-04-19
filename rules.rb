@@ -20,7 +20,8 @@ class Rules
 
         def process(events)
                 @rules.each do |rule|
-                        condition,code,opts = rule
+			begin 
+                       condition,code,opts = rule
 
 			minLength = ([condition.length,events.length].min)
 			
@@ -38,6 +39,11 @@ class Rules
 					end
 				end
                         end
+
+			rescue Exception => e  
+  				puts e.message  
+  				puts e.backtrace.inspect  
+			end
                 end
         end
 

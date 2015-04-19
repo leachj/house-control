@@ -1,13 +1,17 @@
 
 class Room < Hash
 
+	def initialize(hash)
+		merge!(hash)
+	end
+
 	def [](key)
 		fetch(key)
 	end
 
 	def method_missing(method_sym, *arguments, &block)
 		found = false
-		@contents.each do |n,m|
+		each do |n,m|
 			if(m.respond_to?(method_sym))
 				m.send(method_sym, *arguments)
 				found = true
@@ -19,7 +23,7 @@ class Room < Hash
 
 	def respond_to?
 		responds=false
-		@contents.each do |n,m|
+		each do |n,m|
 			if(m.respond_to?(method_sym))
 				responds = true
 			end

@@ -9,7 +9,7 @@ class Rfxcom
 	
 	sc.subscribe('rfxcom-event', lambda do |message|
           	@rules.process([:rfxcom]+message.split(' '))
-        end)
+       end)
 
   end
 
