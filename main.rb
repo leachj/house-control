@@ -20,9 +20,25 @@ state[:home] = false
 
 rfxcom = Rfxcom.new(rules, {"0xF2FF87"=> :studyMoodSwitch, "0xF40C9E" => :loungeMoodSwitch, "0xF422A3"=> :diningRoomSwitch})
 mysensors = Mysensors.new(rules, {"2" => :doorbell, "22" => :loungeDoor})
-rooms = { :lounge => Room.new({ :floorLamp => Lightwave.new("0xF122AA",1), :wallLights => Milight.new("192.168.1.107",3), :fireLights => Milight.new("192.168.1.107",1), :cabinetLights => Milight.new("192.168.1.107",4), :tableLights => Milight.new("192.168.1.107",2) }), :study => Room.new({:wallLights => Milight.new("192.168.1.130",2), :ceilingLight => Milight.new("192.168.1.130",1), :deskLights => Milight.new("192.168.1.130",3)})}
-ping = Pinger.new(rules, { :jonsPhone => "192.168.1.111", :natashasPhone => "192.168.1.132", :loungeTv => "192.168.1.66"})
 androidNotify = AndroidNotify.new("6ee45aa407e99b4ccc678a1a708027d4b58d69c0fcf8d025")
+
+ping = Pinger.new(rules, { 
+	:jonsPhone => "192.168.1.111", 
+	:natashasPhone => "192.168.1.132",
+	:loungeTv => "192.168.1.66"})
+
+rooms = { 
+	:lounge => Room.new({ 
+		:floorLamp => Lightwave.new("0xF122AA",1), 
+		:wallLights => Milight.new("192.168.1.107",3), 
+		:fireLights => Milight.new("192.168.1.107",1), 
+		:cabinetLights => Milight.new("192.168.1.107",4), 
+		:tableLights => Milight.new("192.168.1.107",2) }), 
+	:study => Room.new({
+		:wallLights => Milight.new("192.168.1.130",2), 
+		:ceilingLight => Milight.new("192.168.1.130",1), 
+		:deskLights => Milight.new("192.168.1.130",3)})}
+
 
 rules.on [_] do |n|
 	puts "fired event: #{n}"
