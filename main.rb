@@ -7,6 +7,7 @@ require_relative 'state'
 require_relative 'room'
 require_relative 'pinger'
 require_relative 'androidNotify'
+require_relative 'sunEvents'
 require 'rufus-scheduler'
 
 scheduler = Rufus::Scheduler.new
@@ -18,6 +19,7 @@ rules.state = state
 
 state[:home] = false
 
+sunEvents = SunEvents.new(rules, scheduler)
 rfxcom = Rfxcom.new(rules, {"0xF2FF87"=> :studyMoodSwitch, "0xF40C9E" => :loungeMoodSwitch, "0xF422A3"=> :diningRoomSwitch})
 mysensors = Mysensors.new(rules, {"2" => :doorbell, "22" => :loungeDoor})
 androidNotify = AndroidNotify.new("6ee45aa407e99b4ccc678a1a708027d4b58d69c0fcf8d025")

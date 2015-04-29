@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RubySunrise (0.3.1)
+      tzinfo
     mqtt (0.3.1)
     net-ping (1.7.7)
     ruby-notify-my-android (0.4.3)
@@ -8,12 +10,16 @@ GEM
     rufus-scheduler (3.1.1)
     simple_ruby_mqtt_client (0.3.1)
       mqtt (~> 0.3, >= 0.3)
+    thread_safe (0.3.5)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
     xml-simple (1.1.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  RubySunrise
   net-ping
   ruby-notify-my-android
   rufus-scheduler
