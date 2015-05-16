@@ -1,0 +1,9 @@
+<h1><%="#{@roomName}"%></h1>
+
+<% @room.each do |deviceName,device| %>
+	<%="#{deviceName}"%> <a href="/rooms/<%="#{@roomName}"%>/<%="#{deviceName}"%>/on">on</a> <a href="/rooms/<%="#{@roomName}"%>/<%="#{deviceName}"%>/off">off</a></br>
+<% end %>
+
+</br>
+</br>
+<a href="/">Back</a>

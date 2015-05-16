@@ -1,0 +1,8 @@
+<script src="//www.google.com/jsapi"></script>
+<script src="/chartkick.js"></script>
+<h1>House Control</h1>
+<p><%= @stateName %> History</p>
+	<%= line_chart @state.history[@stateName.to_sym]%>
+</br><a href="/">Back</a>
+</br></br>Raw data is: <%= @state.history[@stateName.to_sym] %>
+

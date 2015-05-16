@@ -28,6 +28,9 @@ class SunEvents
 	end
 
 	scheduler.cron '5 0 * * *' do
+		
+		@calc = SolarEventCalculator.new(Date.today, BigDecimal.new("52.097994"), BigDecimal.new("1.042622"))
+
 		scheduler.at @calc.compute_utc_official_sunrise.strftime(dateFormat) do
                 	@rules.process([:sunrise])
         	end

@@ -1,0 +1,14 @@
+<h1>House Control</h1>
+<p>Rooms</p>
+
+<% @rooms.each do |roomName,room| %>
+	<a href="rooms/<%="#{roomName}"%>"><%="#{roomName.to_s.gsub(/[a-zA-Z](?=[A-Z])/, '\0 ')}"%></a></br>
+<% end %>
+
+<p>State</p>
+<% @state.each do |stateName,state| %>
+        <%="#{stateName} => #{state}"%><a href="history/<%="#{stateName}"%>"> history</a>
+</br>
+<% end %>
+
+
